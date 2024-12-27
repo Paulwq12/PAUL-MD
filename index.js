@@ -26,6 +26,25 @@ function ensurePermissions() {
     });
 }
 
+// Function to delete .cache and .npm folders
+function deleteCacheAndNpm() {
+    const cachePath = path.join(__dirname, '.cache');
+    const npmPath = path.join(__dirname, '.npm');
+
+    try {
+        if (fs.existsSync(cachePath)) {
+            fs.rmSync(cachePath, { recursive: true, force: true });
+            console.log('.cache folder deleted.');
+        }
+        if (fs.existsSync(npmPath)) {
+            fs.rmSync(npmPath, { recursive: true, force: true });
+            console.log('.npm folder deleted.');
+        }
+    } catch (err) {
+        console.error('Error deleting .cache or .npm folder:', err);
+    }
+}
+
 function displayMessages() {
     const messages = [
         `0|${APP_NAME}  | Getting creds.json from session folder ✅`,
@@ -61,7 +80,7 @@ function setupServer() {
     }
 
     const app = express();
-    const port = process.env.PORT || 3000;  // Use PORT from environment or default to 3000
+    const port = process.env.PORT || 3001;  // Use PORT from environment or default to 3000
 
     app.get('/', (req, res) => {
         res.send(`
@@ -145,6 +164,9 @@ function start() {
             console.log('Bot exited gracefully.');
         }
     });
+
+    // Delete the .cache and .npm folders after connecting
+    deleteCacheAndNpm();
 
     // Start the server to show bot live message
     setupServer();
