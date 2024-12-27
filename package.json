@@ -21,6 +21,7 @@
         "@distube/ytdl-core": "^4.13.5",
         "@hapi/boom": "latest",
         "pg": "latest",
+        "express": "latest",
         "dotenv": "latest",
         "@vitalets/google-translate-api": "^9.2.0",
         "anime-wallpaper": "^1.0.2",
