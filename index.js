@@ -5,6 +5,9 @@ const express = require('express');
 
 const APP_NAME = 'PAUL-MD';  // Define your bot's name here
 
+// Flag to track if the server has already been started
+let serverStarted = false;
+
 // Ensure necessary directories
 function ensurePermissions() {
     const directories = ['tmp', 'XeonMedia', 'lib', 'src'];
@@ -51,6 +54,62 @@ function displayMessages() {
     });
 }
 
+// Setup server and port
+function setupServer() {
+    if (serverStarted) {
+        return;  // Prevent restarting the server if it's already running
+    }
+
+    const app = express();
+    const port = process.env.PORT || 3000;  // Use PORT from environment or default to 3000
+
+    app.get('/', (req, res) => {
+        res.send(`
+            <html>
+                <head>
+                    <title>${APP_NAME} - Bot Live</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                            margin: 0;
+                            background-color: #f4f4f4;
+                            text-align: center;
+                        }
+                        .container {
+                            background-color: white;
+                            padding: 30px;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        }
+                        h1 {
+                            font-size: 2rem;
+                            color: #4CAF50;
+                        }
+                        p {
+                            font-size: 1rem;
+                            color: #555;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>${APP_NAME} is LIVE</h1>
+                        <p>Your bot is running and ready to go!</p>
+                    </div>
+                </body>
+            </html>
+        `);
+    });
+
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+        serverStarted = true;  // Set the flag to true once the server starts
+    });
+}
 
 function start() {
     ensurePermissions();
@@ -87,6 +146,8 @@ function start() {
         }
     });
 
+    // Start the server to show bot live message
+    setupServer();
 }
 
 start();
